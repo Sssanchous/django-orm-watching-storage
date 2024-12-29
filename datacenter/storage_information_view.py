@@ -3,29 +3,11 @@ from datacenter.models import Visit
 from django.shortcuts import render
 from datetime import *
 from django.utils.timezone import localtime
-
-
-def get_duration(visit):
-    if visit.leaved_at:
-        delta = visit.leaved_at - visit.entered_at
-    else:
-        time_now = localtime()
-        delta = time_now - visit.entered_at
-    return delta
-
-
-def format_duration(visit):
-    total_seconds = int(visit.total_seconds())
-    hours = int(total_seconds // 3600)
-    minutes = int((total_seconds % 3600) // 60)
-    seconds = int(total_seconds % 60)
-
-    return f'{hours:02}:{minutes:02}:{seconds:02}'
+from .visit_duration_utils import get_duration, format_duration
 
 
 def storage_information_view(request):
 
-    visits = Visit.objects.all()
     not_leaved_visits = Visit.objects.filter(leaved_at=None)
 
     non_closed_visits = []
